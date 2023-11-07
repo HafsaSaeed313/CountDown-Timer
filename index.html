@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <style>
+    body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #0a0a0a;
+    color: #fff;
+}
+
+.countdown {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+}
+
+.countdown-item {
+    margin: 0 20px;
+}
+
+.countdown-item span {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.countdown-item p {
+    font-size: 1rem;
+}
+
+    </style>
+</head>
+<body>
+    <div class="countdown">
+        <div class="countdown-item">
+            <span id="days">00</span>
+            <p>Days</p>
+        </div>
+        <div class="countdown-item">
+            <span id="hours">00</span>
+            <p>Hours</p>
+        </div>
+        <div class="countdown-item">
+            <span id="minutes">00</span>
+            <p>Minutes</p>
+        </div>
+        <div class="countdown-item">
+            <span id="seconds">00</span>
+            <p>Seconds</p>
+        </div>
+    </div>
+    <div class="user-input">
+        <input type="datetime-local" id="userTimeInput">
+        <button id="setTimerButton" onclick="setCountdown()">Set Timer</button>
+    </div>
+
+
+    
+    <script>
+        let targetDate = new Date("2023-01-01 00:00:00").getTime();
+        let interval;
+
+        function updateCountdown() {
+            const currentDate = new Date().getTime();
+            const timeRemaining = targetDate - currentDate;
+
+            const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerHTML = String(days).padStart(2, "0");
+            document.getElementById("hours").innerHTML = String(hours).padStart(2, "0");
+            document.getElementById("minutes").innerHTML = String(minutes).padStart(2, "0");
+            document.getElementById("seconds").innerHTML = String(seconds).padStart(2, "0");
+
+            if (timeRemaining <= 0) {
+                clearInterval(interval);
+                document.querySelector(".countdown").innerHTML = "<h2>Countdown Expired</h2>";
+            }
+        }
+
+        function setCountdown() {
+            const userTimeInput = document.getElementById("userTimeInput").value;
+            if (userTimeInput) {
+                targetDate = new Date(userTimeInput).getTime();
+                updateCountdown();
+                clearInterval(interval); 
+                interval = setInterval(updateCountdown, 1000); 
+            }
+        }
+    </script>
+</body>
+</html>
